@@ -1,3 +1,5 @@
+const Stores = {};
+
 class LocalStorage {
     
     constructor (name) {
@@ -18,7 +20,15 @@ class LocalStorage {
 }
 
 function Store (config = {}) {
-    let { storage, initial } = config || {};
+    if(typeof config === "string" || config.name !== undefined) {
+        let name = typeof config === "string"? config : config.name;
+        
+        if(Stores[name]) return Stores[name];
+
+        if(typeof config === "string") config = { name: name };
+    }
+
+    let { storage, initial, name } = config || {};
 
     let store = (() =>{});
     let values = storage && storage.load() || {};
@@ -82,6 +92,8 @@ function Store (config = {}) {
         for(let i in initial)
             if(!values[i])
                 proxy[i] = initial[i];
+
+    Stores[name] = proxy;
 
     return proxy;
 }
