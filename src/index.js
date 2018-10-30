@@ -1,3 +1,5 @@
+import { Component } from 'react';
+
 const Stores = {};
 
 class LocalStorage {
@@ -63,6 +65,21 @@ function Store (config = {}) {
 
         apply (tar, _self, args) {
             let [self, props] = args;
+
+            if(typeof self === "function") {
+                return class extends Component {
+
+                    constructor (_props) {
+                        super(_props);
+                        this.state = proxy(this, props);
+                    }
+
+                    render () {
+                        return self.apply(this, this.props);
+                    }
+                }
+            }
+
             let keys = Object.keys(props);
             let vals = Object.values(props);
 
@@ -93,7 +110,8 @@ function Store (config = {}) {
             if(!values[i])
                 proxy[i] = initial[i];
 
-    Stores[name] = proxy;
+    if(name)
+        Stores[name] = proxy;
 
     return proxy;
 }

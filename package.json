@@ -1,6 +1,6 @@
 {
   "name": "booga",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Manage redux state with sugar js",
   "main": "./dist/booga.min.js",
   "scripts": {
@@ -23,6 +23,7 @@
     "babel-preset-minify": "^0.5.0"
   },
   "dependencies": {
-    "babel-core": "^6.26.3"
+    "babel-core": "^6.26.3",
+    "react": "^16.6.0"
   }
 }

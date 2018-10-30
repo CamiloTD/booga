@@ -16,6 +16,8 @@
     Object.defineProperty(exports, "__esModule", {
         value: true
     });
+    const Stores = {};
+
     class LocalStorage {
 
         constructor(name) {
@@ -36,7 +38,15 @@
     }
 
     function Store(config = {}) {
-        let { storage, initial } = config || {};
+        if (typeof config === "string" || config.name !== undefined) {
+            let name = typeof config === "string" ? config : config.name;
+
+            if (Stores[name]) return Stores[name];
+
+            if (typeof config === "string") config = { name: name };
+        }
+
+        let { storage, initial, name } = config || {};
 
         let store = () => {};
         let values = storage && storage.load() || {};
@@ -92,6 +102,8 @@
 
         });
         if (initial) for (let i in initial) if (!values[i]) proxy[i] = initial[i];
+
+        Stores[name] = proxy;
 
         return proxy;
     }
