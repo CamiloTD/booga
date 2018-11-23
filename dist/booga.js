@@ -1,21 +1,23 @@
 (function (global, factory) {
     if (typeof define === "function" && define.amd) {
-        define(["exports"], factory);
+        define(["exports", "react"], factory);
     } else if (typeof exports !== "undefined") {
-        factory(exports);
+        factory(exports, require("react"));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod.exports);
-        global.index = mod.exports;
+        factory(mod.exports, global.react);
+        global.Booga = mod.exports;
     }
-})(this, function (exports) {
+})(this, function (exports, _react) {
     "use strict";
 
     Object.defineProperty(exports, "__esModule", {
         value: true
     });
+
+
     const Stores = {};
 
     class LocalStorage {
@@ -77,6 +79,21 @@
 
             apply(tar, _self, args) {
                 let [self, props] = args;
+
+                if (typeof self === "function") {
+                    return class extends _react.Component {
+
+                        constructor(_props) {
+                            super(_props);
+                            this.state = proxy(this, props, this);
+                        }
+
+                        async render() {
+                            return await self.apply(this, this.props, this);
+                        }
+                    };
+                }
+
                 let keys = Object.keys(props);
                 let vals = Object.values(props);
 
@@ -103,7 +120,7 @@
         });
         if (initial) for (let i in initial) if (!values[i]) proxy[i] = initial[i];
 
-        Stores[name] = proxy;
+        if (name) Stores[name] = proxy;
 
         return proxy;
     }

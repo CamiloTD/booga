@@ -4,7 +4,7 @@
   "description": "Manage redux state with sugar js",
   "main": "./dist/booga.min.js",
   "scripts": {
-    "build": "babel --plugins transform-es2015-modules-umd src/index.js -o dist/booga.js && babel --presets minify dist/booga.js -o dist/booga.min.js"
+    "build": "babel --plugins transform-es2015-modules-umd src/Booga.js -o dist/booga.js && babel --presets minify dist/booga.js -o dist/booga.min.js"
   },
   "repository": {
     "type": "git",

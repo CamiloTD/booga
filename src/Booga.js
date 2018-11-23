@@ -71,14 +71,15 @@ function Store (config = {}) {
 
                     constructor (_props) {
                         super(_props);
-                        this.state = proxy(this, props);
+                        this.state = proxy(this, props, this);
                     }
 
-                    render () {
-                        return self.apply(this, this.props);
+                    async render () {
+                        return await self.apply(this, this.props, this);
                     }
                 }
             }
+    
 
             let keys = Object.keys(props);
             let vals = Object.values(props);
