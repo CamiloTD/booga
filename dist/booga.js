@@ -39,6 +39,25 @@
         }
     }
 
+    class SessionStorage {
+
+        constructor(name) {
+            this.name = name;
+        }
+
+        save(values) {
+            process.browser && sessionStorage.setItem(this.name, JSON.stringify(values));
+        }
+
+        load() {
+            return process.browser && JSON.parse(sessionStorage.getItem(this.name)) || {};
+        }
+
+        child(name) {
+            return new sessionStorage(this.name + "-" + name);
+        }
+    }
+
     function Store(config = {}) {
         if (typeof config === "string" || config.name !== undefined) {
             let name = typeof config === "string" ? config : config.name;
@@ -98,7 +117,6 @@
                 let vals = Object.values(props);
 
                 hooks.push((prop, value) => {
-                    debugger;
                     let index = vals.indexOf(prop);
                     if (index + 1) {
                         let x = {};
@@ -126,6 +144,7 @@
     }
 
     Store.localStorage = (...args) => new LocalStorage(...args);
+    Store.sessionStorage = (...args) => new sessionStorage(...args);
 
     exports.default = Store;
 });
